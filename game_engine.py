@@ -289,7 +289,7 @@ def select_character():
     elif (secret_character_bunny == True) and ((player_input == "The Bunny") or (player_input == "THE BUNNY") or (player_input == "the bunny")):
         player_character = Bunny()
     elif (secret_character_puppy == True) and ((player_input == "Rocco Taco") or (player_input == "ROCCO TACO") or (player_input == "rocco taco")):
-        player_character = RoccoTaco
+        player_character = RoccoTaco()
     elif (secret_character_witch == True) and((player_input == "Annabelle") or (player_input == "ANNABELLE") or (player_input == "annabelle")):
         player_character = Annabelle()
     else:
@@ -399,7 +399,7 @@ def random_event():
     global green_gem_quest
     event = random.randint(1, 100)
     if (current_position == " "):
-        if (event <= 25):
+        if (event <= 35):
             random_item = random.randint(1, 2)
             if (random_item == 1):
                 found_item = Berries().name
@@ -409,7 +409,7 @@ def random_event():
                 player_character.combat_inventory.append(found_item)
             print("While searching through the open fields, you have discovered some " + str(found_item) + "! You place it in your inventory. \n")
             player_actions()
-        elif (event > 25 and event <= 85):
+        elif (event > 35 and event <= 70):
             random_opponent = random.randint(1, 10)
             if (random_opponent <= 3):
                 opponent = BadBunny()
@@ -425,7 +425,7 @@ def random_event():
                 print(opponent)
             print("\nYou have encountered a " + opponent.name + "!\n")
             combat()
-        elif (event > 85):
+        elif (event > 70):
             print("\nAs you search around the open plains, you admire the scenery and take comfort in the gentle breeze that wafts across you. As the tallgrass shimmers like golden waves, you sit and relax.\n")
             if (green_gem_quest == True):
                 trap_door_choice = input("As you search through the open fields for the " + GreenGem().name + ", you discover a rotted trapdoor that is nearly invisible under a thicket. It does not appear locked or guarded, and you are unsure where it leads. What will you do?\nInput (yes or no): ")
@@ -548,6 +548,8 @@ def combat():
                 turn = True
             elif (enemy_action == 17):
                 print(opponent.flee)
+                if (green_gem_quest == True and current_position == "C"):
+                    search_cave()
                 player_actions()
         if (player_character.starting_HP <= 0) or (opponent.starting_HP <= 0):
             victory_conditions()
@@ -701,8 +703,8 @@ def search_cave():
     find_gem_option = input("As you gaze around the overgrown chamber, do you wish to keep searching for the gem?\nInput (Yes or No): ")
     if (find_gem_option == "Yes") or (find_gem_option == "YES") or (find_gem_option == "yes"):
         current_position = "C"
-        search = random.randint(1, 5)
-        search = search + player_character[9]
+        search = random.randint(1, 6)
+        search = search + player_character.luck
         if (search <= 4):
             print("Despite ripping out some leaves and roots, you fail to find anything that resembles a gem.\n")
         elif (search > 4 and search <= 7):
